@@ -6,10 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Zack Shih",
+  "bin": {
+    "upload-image-uc3100": "./uc3100.js"
+  },
+  "license": "MIT",
   "dependencies": {
-    "debug": "^4.1.1",
+    "expect-telnet": "^1.0.0",
     "serialport": "^7.1.4"
   }
 }
