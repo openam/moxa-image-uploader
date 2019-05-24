@@ -1,15 +1,15 @@
-const captureDevice = require('./lib/captureDevice');
-const uploadImage = require('./lib/uc3100');
 const debug = require('debug')('moxa-image-uploader:server');
 const express = require('express');
-const ports = require('./lib/store').ports;
-const devices = require('./lib/store').devices;
+const captureDevice = require('./lib/captureDevice');
+const uploadImage = require('./lib/uc3100');
+const { ports } = require('./lib/store');
+const { devices } = require('./lib/store');
 
 const router = express.Router();
 
 router
   .route('/image')
-  .post(function (req, res) {
+  .post((req, res) => {
     // {
     //   "serialNumber": "TAGGA1001926",
     //   "fileName": "filename.img",
@@ -27,9 +27,9 @@ router
 
     port.status = 'UPLOAD_IMAGE_START';
     uploadImage(
-        port.serverIP, port.serverPort, req.body.tftpServerIP, req.body.tftpDeviceIP,
-        req.body.fileName, req.body.timeout, req.body.rebootToFinish
-      )
+      port.serverIP, port.serverPort, req.body.tftpServerIP, req.body.tftpDeviceIP,
+      req.body.fileName, req.body.timeout, req.body.rebootToFinish,
+    )
       .then(() => {
         port.status = 'UPLOAD_IMAGE_DONE';
       })
@@ -37,14 +37,14 @@ router
         port.status = 'UPLOAD_IMAGE_FAILED';
       })
       .finally(() => {
-        captureDevice(port.name).then(function (device) {});
+        captureDevice(port.name).then(() => {});
       });
 
-    res.sendStatus(202);
+    return res.sendStatus(202);
   });
 
 router
-  .param('serialNumber', function(req, res, next, serialNumber) {
+  .param('serialNumber', (req, res, next, serialNumber) => {
     if (!devices[serialNumber]) {
       res.sendStatus(404);
     }
@@ -55,29 +55,29 @@ router
 
 router
   .route('/devices/:serialNumber')
-  .get(function (req, res) {
+  .get((req, res) => {
     res.json(
       Object.assign(
         { port: ports[req.device.portName] },
-        req.device
-      )
+        req.device,
+      ),
     );
   });
 
 router
   .route('/devices')
-  .get(function (req, res) {
+  .get((req, res) => {
     res.json(devices);
   });
 
 router
   .route('/ports')
-  .get(function (req, res) {
+  .get((req, res) => {
     res.json(ports);
   });
 
 router
-  .param('portName', function(req, res, next, portName) {
+  .param('portName', (req, res, next, portName) => {
     if (!ports[portName]) {
       res.sendStatus(404);
     }
@@ -88,15 +88,16 @@ router
 
 router
   .route('/ports/:portName')
-  .get(function (req, res) {
+  .get((req, res) => {
     res.json(req.port);
   });
 
 // Open all the ports
-for (let port of Object.values(ports)) {
+Object.values(ports).map((port) => {
   debug(port);
-  port.promise = captureDevice(port.name).then(function (device) {});
-}
+  return captureDevice(port.name).then(() => {});
+});
+
 
 // Start web server
 const httpPort = process.env.PORT || 8080;
@@ -105,4 +106,6 @@ app.use(express.json());
 app.use(router);
 app.listen(
   httpPort,
-  () => console.log(`moxa-image-uploader server is listening on port ${httpPort}.`));
+  // eslint-disable-next-line no-console
+  () => console.log(`moxa-image-uploader server is listening on port ${httpPort}.`),
+);

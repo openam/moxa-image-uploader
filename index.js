@@ -1,13 +1,12 @@
 const debug = require('debug')('moxa-image-uploader:index');
 const captureDevice = require('./lib/captureDevice');
 const uploadImage = require('./lib/uc3100');
-const ports = require('./lib/store').ports;
-const devices = require('./lib/store').devices;
+const { ports } = require('./lib/store');
+const { devices } = require('./lib/store');
 
 (async () => {
-  const devices = {};
   await (async () => {
-    const instance = await captureDevice('Port1');
+    await captureDevice('Port1');
     debug(devices);
   })();
 
@@ -23,7 +22,9 @@ const devices = require('./lib/store').devices;
     port.status = 'UPLOAD_IMAGE_START';
     debug(device);
     try {
-      await uploadImage(port.serverIP, port.serverPort, tftpServerIP, tftpDeviceIP, fileName, timeout, true);
+      await uploadImage(
+        port.serverIP, port.serverPort, tftpServerIP, tftpDeviceIP, fileName, timeout, true,
+      );
       port.status = 'UPLOAD_IMAGE_DONE';
     } catch (err) {
       port.status = 'UPLOAD_IMAGE_FAILED';
