@@ -1,15 +1,14 @@
 const debug = require('debug')('moxa-image-uploader:index');
 const captureDevice = require('./lib/captureDevice');
 const uploadImage = require('./lib/uc3100');
+const ports = require('./lib/store').ports;
+const devices = require('./lib/store').devices;
 
 (async () => {
   const devices = {};
   await (async () => {
-    const serverIP = '192.168.127.254';
-    const serverPort = 4001;
-    const instance = await captureDevice(serverIP, serverPort);
-    devices[instance.device.serialNumber] = instance;
-    debug(instance);
+    const instance = await captureDevice('Port1');
+    debug(devices);
   })();
 
   await (async () => {
@@ -17,21 +16,20 @@ const uploadImage = require('./lib/uc3100');
     const tftpDeviceIP = '192.168.127.200';
     const fileName = 'tftpd32.ini';
     const timeout = 60 * 1000;
-    const instance = devices['201903260119'];
-    if (!instance) {
-      return;
-    }
+    const device = devices['201903260119'];
+    if (!device) return;
+    const port = ports[device.portName];
 
-    instance.status = 'UPLOAD_IMAGE_START';
-    debug(instance);
+    port.status = 'UPLOAD_IMAGE_START';
+    debug(device);
     try {
-      await uploadImage(instance.serverIP, instance.serverPort, tftpServerIP, tftpDeviceIP, fileName, timeout, true);
-      instance.status = 'UPLOAD_IMAGE_DONE';
+      await uploadImage(port.serverIP, port.serverPort, tftpServerIP, tftpDeviceIP, fileName, timeout, true);
+      port.status = 'UPLOAD_IMAGE_DONE';
     } catch (err) {
-      instance.status = 'UPLOAD_IMAGE_FAILED';
+      port.status = 'UPLOAD_IMAGE_FAILED';
       debug(err);
     }
 
-    debug(instance);
+    debug(port);
   })();
 })();
