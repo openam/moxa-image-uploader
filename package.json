@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "expect-telnet": "^1.0.0",
+    "express": "^4.17.0",
     "serialport": "^7.1.4"
   }
 }
