@@ -25,9 +25,9 @@ router
     if (!device) return res.sendStatus(404);
     const port = ports[device.portName];
 
-    port.status = 'UPLOAD_IMAGE_START';
+    port.status = 'UPLOAD_IMAGE_WAITING_FOR_DEVICE';
     uploadImage(
-      port.serverIP, port.serverPort, req.body.tftpServerIP, req.body.tftpDeviceIP,
+      port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
       req.body.fileName, req.body.timeout, req.body.rebootToFinish,
     )
       .then(() => {
@@ -49,7 +49,7 @@ router
       res.sendStatus(404);
     }
 
-    res.device = devices[serialNumber];
+    req.device = devices[serialNumber];
     next();
   });
 
@@ -57,23 +57,26 @@ router
   .route('/devices/:serialNumber')
   .get((req, res) => {
     res.json(
-      Object.assign(
-        { port: ports[req.device.portName] },
-        req.device,
-      ),
+      { port: ports[req.device.portName], ...req.device },
     );
   });
 
 router
   .route('/devices')
   .get((req, res) => {
-    res.json(devices);
+    res.json(
+      Object.values(devices).map(
+        device => (
+          { port: ports[device.portName], ...device }
+        ),
+      ),
+    );
   });
 
 router
   .route('/ports')
   .get((req, res) => {
-    res.json(ports);
+    res.json(Object.values(ports));
   });
 
 router
@@ -82,7 +85,7 @@ router
       res.sendStatus(404);
     }
 
-    res.port = ports[portName];
+    req.port = ports[portName];
     next();
   });
 
@@ -101,11 +104,13 @@ Object.values(ports).map((port) => {
 
 // Start web server
 const httpPort = process.env.PORT || 8080;
+const httpHost = process.env.HOST || '0.0.0.0';
 const app = express();
 app.use(express.json());
 app.use(router);
 app.listen(
   httpPort,
+  httpHost,
   // eslint-disable-next-line no-console
   () => console.log(`moxa-image-uploader server is listening on port ${httpPort}.`),
 );
