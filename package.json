@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./*.js && eslint ./lib/*.js"
   },
   "author": "Zack Shih",
   "license": "MIT",
+  "engines": {
+    "node": ">=10 <11"
+  },
   "dependencies": {
     "debug": "^4.1.1",
     "expect-telnet": "^1.0.0",
