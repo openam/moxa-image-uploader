@@ -15,6 +15,7 @@ Available APIs
 ```bash
 git clone git@github.com:imZack/moxa-image-uploader.git
 cd moxa-image-uploader
+nvm use # (optional to use common node version)
 npm install
 ```
 

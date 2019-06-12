@@ -10,6 +10,9 @@
   },
   "author": "Zack Shih",
   "license": "MIT",
+  "engines": {
+    "node": ">=10 <11"
+  },
   "dependencies": {
     "debug": "^4.1.1",
     "expect-telnet": "^1.0.0",
