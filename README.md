@@ -10,6 +10,38 @@ Available APIs
 * GET /ports/:portName
 * POST /image
 
+## Configuration
+
+The application comes with default ports configured. They are located in `./lib/portDefaults.js`. The defaults are for a 4 port device. The ports are named `Port1` through `Port4`.
+
+* Port defaults
+  * Serial server ip: 192.168.127.254
+  * Port1: 4001
+  * Port2: 4002
+  * Port3: 4003
+  * Port4: 4004
+
+You can also configure the ports using environment variables. To get it to work you need to use at least two environment variables, i.e. `SERVER_COUNT` and `SERVER_1`. You can increase the `SERVER_COUNT` and add the corresponding `SERVER_#` environment variables to add additional servers. The `SERVER_#` is a comma separated list of arguments. The port names are prefixed with `Server#`. To mirror the default config you would use the following:
+
+The `SERVER_#` comma separated arguments are:
+
+1. Serial server ip
+1. First port number
+1. Number of total ports. It increases by 1 from the first port number through the total number of ports.
+
+```bash
+SERVER_COUNT=1 SERVER_1="192.168.127.254,4001,4" npm start
+```
+
+This would result in the following config
+
+* Generated ports
+  * Serial server ip: 192.168.127.254
+  * Server1Port1: 4001
+  * Server1Port2: 4002
+  * Server1Port3: 4003
+  * Server1Port4: 4004
+
 ## Development
 
 ```bash
