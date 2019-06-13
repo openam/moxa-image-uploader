@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./*.js && eslint ./lib/*.js"
+    "lint": "eslint ."
   },
   "author": "Zack Shih",
   "license": "MIT",
@@ -18,5 +18,10 @@
     "expect-telnet": "^1.0.0",
     "express": "^4.17.0",
     "serialport": "^7.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.3"
   }
 }
