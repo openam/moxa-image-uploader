@@ -1,4 +1,4 @@
-# moxa-image-uploader
+# moxa-image-uploader [![Build Status](https://www.travis-ci.com/imZack/moxa-image-uploader.svg?branch=master)](https://www.travis-ci.com/imZack/moxa-image-uploader)
 
 Provides an api to to work with the serial server. The server watches to see what devices are hooked up to the serial cables, and provides some apis to discover the devices hooked up. Most importantly it allows you to re-image a device based on serial number.
 
