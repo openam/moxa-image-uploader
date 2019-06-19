@@ -85,4 +85,7 @@ docker build -t moxa-image-uploader .
 
 ## Testing
 
-Currently there are no tests.
+The following node scripts and their descriptions
+
+* `test` runs the unit tests.
+* `test:watch` runs the unit tests with the watch flag min report and bails on the first failed test.
