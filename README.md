@@ -42,6 +42,20 @@ This would result in the following config
   * Server1Port3: 4003
   * Server1Port4: 4004
 
+### Using docker
+
+There is a Dockerfile available in this repo. You can use the docker image by running the following. You can remove `--env DEBUG=*` if you don't want it, and you change change the server count and port assignments as needed.
+
+```bash
+docker run -it --rm \
+  --name moxa-image-uploader \
+  -p 8080:8080 \
+  --env DEBUG="*" \
+  --env SERVER_COUNT="1" \
+  --env SERVER_1="192.168.127.254,4001,4" \
+  moxa-image-uploader
+```
+
 ## Development
 
 ```bash
@@ -63,6 +77,15 @@ Make sure you lint new code before committing.
 npm run lint
 ```
 
+You can build the docker image by using
+
+```bash
+docker build -t moxa-image-uploader .
+```
+
 ## Testing
 
-Currently there are no tests.
+The following node scripts and their descriptions
+
+* `test` runs the unit tests.
+* `test:watch` runs the unit tests with the watch flag min report and bails on the first failed test.
