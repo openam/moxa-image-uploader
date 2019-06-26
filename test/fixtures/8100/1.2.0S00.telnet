@@ -1,0 +1,17 @@
+----------------------------------------------------------------------------
+  Model: UC-8100-ME
+  Boot Loader Version 1.2.0S00         CPU TYPE: 1GHz
+  Build date: Feb  8 2018 - 00:39:34   Serial Number: 201601201034
+  LAN1 MAC: 00:90:e8:00:eb:8a          LAN2 MAC: 00:90:e8:00:eb:8b
+----------------------------------------------------------------------------
+(0) Set/Clear Flag                 (1) Download/Upload
+(2) Set SN/MAC                     (3) Set Burn in Time
+(4) Module/ID Setting              (5) TFTP Settings
+(6) Console/UART Test              (7) Ethernet Test
+(8) IO Test                        (9) Memory/Storage Test
+(a) TPM Setting                    (b) RTC Test
+(c) USB Host Test                  (d) SD Test
+(e) LED Test                       (f) WDT Test
+(g) QA Test                        (h) Run Kernel
+(q) UBoot Command Line
+---------------------------------------------------------------------------

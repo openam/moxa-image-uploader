@@ -1,9 +1,28 @@
 const debug = require('debug')('moxa-image-uploader:server');
 const express = require('express');
 const captureDevice = require('./lib/captureDevice');
-const uploadImage = require('./lib/uc3100');
+const uc3100 = require('./lib/uc3100');
+const uc8100 = require('./lib/uc8100');
 const { ports } = require('./lib/store');
 const { devices } = require('./lib/store');
+
+function uploadImage(port) {
+  const { modelName } = port.device;
+
+  if (/3100|3111/.test(modelName)) {
+    return uc3100;
+  }
+
+  if (/8100|8112/.test(modelName)) {
+    return uc8100;
+  }
+
+  return function errorCase() {
+    return new Promise((resolve, reject) => {
+      reject(new Error('Could not determine model number to use'));
+    });
+  };
+}
 
 const router = express.Router();
 
@@ -26,14 +45,16 @@ router
     const port = ports[device.portName];
 
     port.status = 'UPLOAD_IMAGE_WAITING_FOR_DEVICE';
-    uploadImage(
+    uploadImage(port)(
       port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
       req.body.fileName, req.body.timeout, req.body.rebootToFinish,
     )
       .then(() => {
         port.status = 'UPLOAD_IMAGE_DONE';
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error uploading image', device, port, error);
+
         port.status = 'UPLOAD_IMAGE_FAILED';
       })
       .finally(() => {

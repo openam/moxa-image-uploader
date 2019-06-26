@@ -1,0 +1,18 @@
+----------------------------------------------------------------------------
+  Model: UC-3111-LX
+  Boot Loader Version: 1.3.0S02         CPU TYPE: 1000MHz
+  Build date: Feb 11 2019 - 12:09:11   Serial Number: 201902260086
+  LAN1 MAC: 00:90:E8:00:F9:3C          LAN2 MAC: 00:90:E8:00:F9:3D
+----------------------------------------------------------------------------
+(0) Set/Clear Flag                 (1) Download/Upload                
+(2) Set SN/MAC                     (3) Set Burn in Time               
+(4) Module/ID Setting              (5) TFTP Settings                  
+(6) Console/UART Test              (7) Ethernet Test                  
+(8) IO Test                        (9) Memory/Storage Test            
+(a) TPM2 Setting                   (b) RTC Test                       
+(c) USB Host Test                  (d) SD Test                        
+(e) LED Test                       (f) WDT Test                       
+(g) QA Test                        (h) Run Kernel                     
+(i) Silent Flag                    (q) UBoot Command Line             
+---------------------------------------------------------------------------
+Command>>**

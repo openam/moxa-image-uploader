@@ -1,0 +1,16 @@
+----------------------------------------------------------------------------
+  Model: UC-8100-ME
+  Boot Loader Version 1.2.16C00         CPU TYPE: 1GHz
+  Build date: Oct  6 2017 - 08:54:02   Serial Number: IMOXA1234567
+  LAN1 MAC: 00:90:e8:00:00:40          LAN2 MAC: 00:90:e8:00:00:50
+----------------------------------------------------------------------------
+(0) Set/Clear Flag                 (1) Download/Upload
+(2) Set SN/MAC                     (3) Set Burn in Time
+(4) Module/ID Setting              (5) TFTP Settings
+(6) Console/UART Test              (7) Ethernet Test
+(8) IO Test                        (9) Memory/Storage Test
+(a) RTC Test                       (b) USB Host Test
+(c) LED Test                       (d) WDT Test
+(e) QA Test                        (f) Run Kernel
+(q) UBoot Command Line
+---------------------------------------------------------------------------
