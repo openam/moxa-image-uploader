@@ -5,6 +5,7 @@ const uc3100 = require('./lib/uc3100');
 const uc8100 = require('./lib/uc8100');
 const searchPorts = require('./lib/searchPorts');
 const { ports, devices } = require('./lib/store');
+const status = require('./lib/status');
 
 function uploadImage(port) {
   const { modelName } = port.device;
@@ -46,27 +47,23 @@ router
     // TODO: need to verify that the devices is still attached to that port
     if (!port.device || port.device.serialNumber !== device.serialNumber) return res.sendStatus(404);
 
-    port.status = 'UPLOAD_IMAGE_WAITING_FOR_DEVICE';
+    port.status = status.UPLOAD_IMAGE_WAITING_FOR_DEVICE;
     port.updatedAt = Date.now();
     uploadImage(port)(
       port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
       req.body.fileName, req.body.timeout, req.body.rebootToFinish,
     )
       .then(() => {
-        port.status = 'UPLOAD_IMAGE_DONE';
+        port.status = status.UPLOAD_IMAGE_DONE;
         port.updatedAt = Date.now();
       })
       .catch((error) => {
         console.error('Error uploading image', device, port, error);
 
         const now = Date.now();
-        port.status = 'UPLOAD_IMAGE_FAILED';
+        port.status = status.UPLOAD_IMAGE_FAILED;
         port.updatedAt = now;
         device.updatedAt = now;
-      })
-      .finally(() => {
-        // TODO: figure out how to capture rebooted state, but keep on searching
-        captureDevice(port.name, device.serialNumber).then(() => {});
       });
 
     return res.sendStatus(202);
