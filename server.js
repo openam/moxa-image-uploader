@@ -3,8 +3,8 @@ const express = require('express');
 const captureDevice = require('./lib/captureDevice');
 const uc3100 = require('./lib/uc3100');
 const uc8100 = require('./lib/uc8100');
-const { ports } = require('./lib/store');
-const { devices } = require('./lib/store');
+const searchPorts = require('./lib/searchPorts');
+const { ports, devices } = require('./lib/store');
 
 function uploadImage(port) {
   const { modelName } = port.device;
@@ -43,22 +43,30 @@ router
     const device = devices[req.body.serialNumber];
     if (!device) return res.sendStatus(404);
     const port = ports[device.portName];
+    // TODO: need to verify that the devices is still attached to that port
+    if (!port.device || port.device.serialNumber !== device.serialNumber) return res.sendStatus(404);
 
     port.status = 'UPLOAD_IMAGE_WAITING_FOR_DEVICE';
+    port.updatedAt = Date.now();
     uploadImage(port)(
       port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
       req.body.fileName, req.body.timeout, req.body.rebootToFinish,
     )
       .then(() => {
         port.status = 'UPLOAD_IMAGE_DONE';
+        port.updatedAt = Date.now();
       })
       .catch((error) => {
         console.error('Error uploading image', device, port, error);
 
+        const now = Date.now();
         port.status = 'UPLOAD_IMAGE_FAILED';
+        port.updatedAt = now;
+        device.updatedAt = now;
       })
       .finally(() => {
-        captureDevice(port.name).then(() => {});
+        // TODO: figure out how to capture rebooted state, but keep on searching
+        captureDevice(port.name, device.serialNumber).then(() => {});
       });
 
     return res.sendStatus(202);
@@ -116,12 +124,10 @@ router
     res.json(req.port);
   });
 
-// Open all the ports
-Object.values(ports).map((port) => {
-  debug(port);
-  return captureDevice(port.name).then(() => {});
-});
-
+// Keep looking for ports in the background;
+setInterval(() => {
+  searchPorts();
+}, 5000);
 
 // Start web server
 const httpPort = process.env.PORT || 8080;
