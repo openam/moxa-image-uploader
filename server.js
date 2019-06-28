@@ -1,29 +1,9 @@
 const debug = require('debug')('moxa-image-uploader:server');
 const express = require('express');
-const captureDevice = require('./lib/captureDevice');
-const uc3100 = require('./lib/uc3100');
-const uc8100 = require('./lib/uc8100');
+const uploadImage = require('./lib/uploadImage');
 const searchPorts = require('./lib/searchPorts');
 const { ports, devices } = require('./lib/store');
 const status = require('./lib/status');
-
-function uploadImage(port) {
-  const { modelName } = port.device;
-
-  if (/3100|3111/.test(modelName)) {
-    return uc3100;
-  }
-
-  if (/8100|8112/.test(modelName)) {
-    return uc8100;
-  }
-
-  return function errorCase() {
-    return new Promise((resolve, reject) => {
-      reject(new Error('Could not determine model number to use'));
-    });
-  };
-}
 
 const router = express.Router();
 
