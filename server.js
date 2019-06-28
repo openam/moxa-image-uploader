@@ -3,8 +3,8 @@ const express = require('express');
 const captureDevice = require('./lib/captureDevice');
 const uc3100 = require('./lib/uc3100');
 const uc8100 = require('./lib/uc8100');
-const { ports } = require('./lib/store');
-const { devices } = require('./lib/store');
+const { ports, devices } = require('./lib/store');
+const status = require('./lib/status');
 
 function uploadImage(port) {
   const { modelName } = port.device;
@@ -44,18 +44,18 @@ router
     if (!device) return res.sendStatus(404);
     const port = ports[device.portName];
 
-    port.status = 'UPLOAD_IMAGE_WAITING_FOR_DEVICE';
+    port.status = status.UPLOAD_IMAGE_WAITING_FOR_DEVICE;
     uploadImage(port)(
       port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
       req.body.fileName, req.body.timeout, req.body.rebootToFinish,
     )
       .then(() => {
-        port.status = 'UPLOAD_IMAGE_DONE';
+        port.status = status.UPLOAD_IMAGE_DONE;
       })
       .catch((error) => {
         console.error('Error uploading image', device, port, error);
 
-        port.status = 'UPLOAD_IMAGE_FAILED';
+        port.status = status.UPLOAD_IMAGE_FAILED;
       })
       .finally(() => {
         captureDevice(port.name).then(() => {});
