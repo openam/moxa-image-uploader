@@ -45,7 +45,7 @@ const argv = require('yargs') // eslint-disable-line
   })
   .argv;
 
-
+debug(argv);
 process.env.SERVER_COUNT = 1;
 process.env.SERVER_1 = `${argv['terminal-server-host']},${argv['terminal-server-port']},1`;
 
@@ -58,6 +58,7 @@ const { ports } = require('../lib/store');
   while (argv.continue) {
     console.log(chalk.green('waiting for device...'));
     await captureDevice('Server1Port1');
+    debug(ports);
     console.log(chalk.grey('entering bootloader for uploading image...'));
     await (async () => {
       try {
