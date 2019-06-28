@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --exec npm start",
+    "dev": "DEBUG=moxa-image-uploader:* nodemon --exec npm start",
     "lint": "eslint .",
     "test": "mocha --recursive",
     "test:watch": "nodemon --exec npm test"
