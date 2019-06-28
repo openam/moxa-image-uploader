@@ -1,6 +1,6 @@
 const debug = require('debug')('moxa-image-uploader:index');
 const captureDevice = require('./lib/captureDevice');
-const uploadImage = require('./lib/uc3100');
+const uploadImage = require('./lib/uploadImage');
 const { ports } = require('./lib/store');
 const { devices } = require('./lib/store');
 
