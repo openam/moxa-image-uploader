@@ -44,6 +44,8 @@ router
     const device = devices[req.body.serialNumber];
     if (!device) return res.sendStatus(404);
     const port = ports[device.portName];
+    // TODO: need to verify that the devices is still attached to that port
+    if (!port.device || port.device.serialNumber !== device.serialNumber) return res.sendStatus(404);
 
     port.status = status.UPLOAD_IMAGE_WAITING_FOR_DEVICE;
     port.updatedAt = Date.now();
