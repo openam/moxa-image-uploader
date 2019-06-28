@@ -2,7 +2,10 @@
   "name": "moxa-image-uploader",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
+  "bin": {
+    "image-uploader": "bin/image-uploader.js"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "DEBUG=moxa-image-uploader:* nodemon --exec npm start",
@@ -16,10 +19,12 @@
     "node": ">=10 <11"
   },
   "dependencies": {
+    "chalk": "^2.4.2",
     "debug": "^4.1.1",
     "expect-telnet": "^1.0.0",
     "express": "^4.17.0",
-    "serialport": "^7.1.4"
+    "serialport": "^7.1.4",
+    "yargs": "^13.2.4"
   },
   "devDependencies": {
     "chai": "^4.2.0",
