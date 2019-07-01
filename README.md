@@ -56,6 +56,38 @@ docker run -it --rm \
   moxa-image-uploader
 ```
 
+## `image-uploader` command
+
+This npm package also comes with a utility `image-uploader` for uploading the image to one device.
+
+If you want to upload the image `example.img` hosted by a TFTP server located at `192.168.116.1`, the target device IP is `192.168.116.2`, terminal server host is `192.168.127.254` and terminal server port is `4001`.
+
+The full command is below:
+
+```shell
+image-uploader --ts 192.168.116.1 --td 192.168.116.2 -s 192.168.115.254 -p 4001 -i example.img
+```
+
+### Usage
+
+```shell
+Options:
+  --help                      Show help                                [boolean]
+  --version                   Show version number                      [boolean]
+  --tftp-server-ip, --ts      TFTP Server IP (where device download image from)
+                                                                      [required]
+  --tftp-device-ip, --td      TFTP Device IP (device IP address for TFTP)
+                                                                      [required]
+  --upload-image-timeout, -t  Upload image timeout in millsecond
+                                                              [default: 1200000]
+  --terminal-server-host, -s  Terminal server host  [default: "192.168.127.254"]
+  --terminal-server-port, -p  Terminal server port               [default: 4001]
+  --image, -i                 Image name                  [default: "image.img"]
+  --continue, -c              Upload image for every new detected device
+                                                                 [default: true]
+  --verbose, -v                                                 [default: false]
+```
+
 ## Development
 
 ```bash
