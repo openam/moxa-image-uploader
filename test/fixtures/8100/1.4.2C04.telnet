@@ -1,0 +1,19 @@
+
+----------------------------------------------------------------------------
+  Model: UC-8112-LX (VS)
+  Boot Loader Version 1.4.2C04         CPU TYPE: 1GHz
+  Build date: Jun 28 2018 - 15:37:29   Serial Number: TAIBB1103828
+  LAN1 MAC: 00:90:E8:78:E0:E6         LAN2 MAC: 00:90:E8:78:E0:E7 �-------------------------------------------------------------------------
+(0) Set/Clear Flag                 (1) Download/Upload                
+(2) Set SN/MAC                     (3) Set Burn in Time               
+(4) Module/ID Setting              (5) TFTP Settings                  
+(6) Console/UART Test              (7) Ethernet Test                  
+(8) IO Test                        (9) Memory/Storage Test            
+(a) RTC Test                       (b) USB Host Test                  
+(c) LED Test                       (d) WDT Test                       
+(e) QA Test                        (f) Run Kernel                     
+(q) UBoot Command Line             
+---------------------------------------------------------------------------
+Command>>**\n
+
+----------------------------------------------------------------------------\r

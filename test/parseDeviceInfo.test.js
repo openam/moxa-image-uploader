@@ -33,6 +33,18 @@ describe('parseDeviceInfo', () => {
     expect(result).to.have.property('MAC2', '00:90:e8:00:eb:8b');
   });
 
+  it('should capture UC-8100 Boot Loader 1.4.2C04', () => {
+    parseDeviceInfo(result)(fs.readFileSync(`${__dirname}/fixtures/8100/1.4.2C04.telnet`));
+
+    expect(result).to.have.property('modelName', 'UC-8112-LX (VS)');
+    expect(result).to.have.property('bootloaderVersion', '1.4.2C04');
+    expect(result).to.have.property('cpuType', '1GHz');
+    expect(result).to.have.property('bootloaderBuildDate', 'Jun 28 2018 - 15:37:29');
+    expect(result).to.have.property('serialNumber', 'TAIBB1103828');
+    expect(result).to.have.property('MAC1', '00:90:E8:78:E0:E6');
+    expect(result).to.have.property('MAC2', '00:90:E8:78:E0:E7');
+  });
+
   it('should capture UC-3100 Boot Loader 1.3.0S02', () => {
     parseDeviceInfo(result)(fs.readFileSync(`${__dirname}/fixtures/3100/1.3.0S02.telnet`));
 
