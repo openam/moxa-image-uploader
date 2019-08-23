@@ -29,6 +29,8 @@ The `SERVER_#` comma separated arguments are:
 1. First port number
 1. Number of total ports. It increases by 1 from the first port number through the total number of ports.
 
+Some UC3100 devices have a bootloader that allows changing to which LAN port to use for TFTP. The default is to use LAN 1 port. You may update this for newer devices, with compatible bootloaders, by setting an environment variable. For example `TFTP_PORT=2` will tell the uploader to set LAN2 as the port to do the TFTP transfer over.
+
 ```bash
 SERVER_COUNT=1 SERVER_1="192.168.127.254,4001,4" npm start
 ```
