@@ -1,6 +1,6 @@
 const debug = require('debug')('moxa-image-uploader:server');
 const express = require('express');
-const uploadImage = require('./lib/uploadImage');
+const getModelUploader = require('./lib/getModelUploader');
 const searchPorts = require('./lib/searchPorts');
 const { ports, devices } = require('./lib/store');
 const status = require('./lib/status');
@@ -31,23 +31,30 @@ router
 
     port.status = status.UPLOAD_IMAGE_WAITING_FOR_DEVICE;
     port.updatedAt = Date.now();
-    uploadImage(port)(
-      port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
-      req.body.fileName, req.body.timeout, req.body.rebootToFinish,
-    )
-      .then(() => {
-        port.status = status.UPLOAD_IMAGE_DONE;
-        port.updatedAt = Date.now();
-      })
-      .catch((error) => {
-        debug('Error uploading image', device, port, error);
-        const now = Date.now();
-        port.status = status.UPLOAD_IMAGE_FAILED;
-        port.updatedAt = now;
-        device.updatedAt = now;
-      });
+    try {
+      const modelUploader = getModelUploader(port);
 
-    return res.sendStatus(202);
+      modelUploader(
+        port.name, req.body.tftpServerIP, req.body.tftpDeviceIP,
+        req.body.fileName, req.body.timeout, req.body.rebootToFinish,
+      )
+        .then(() => {
+          port.status = status.UPLOAD_IMAGE_DONE;
+          port.updatedAt = Date.now();
+        })
+        .catch((error) => {
+          debug('Error uploading image', device, port, error);
+          const now = Date.now();
+          port.status = status.UPLOAD_IMAGE_FAILED;
+          port.updatedAt = now;
+          device.updatedAt = now;
+        });
+
+      return res.sendStatus(202);
+    } catch (error) {
+      debug('Error uploading image', device, port, error);
+      return res.sendStatus(500);
+    }
   });
 
 router

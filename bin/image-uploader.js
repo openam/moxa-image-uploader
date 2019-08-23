@@ -50,7 +50,7 @@ process.env.SERVER_COUNT = 1;
 process.env.SERVER_1 = `${argv['terminal-server-host']},${argv['terminal-server-port']},1`;
 
 const captureDevice = require('../lib/captureDevice');
-const uploadImage = require('../lib/uploadImage');
+const getModelUploader = require('../lib/getModelUploader');
 const { ports } = require('../lib/store');
 
 
@@ -63,7 +63,8 @@ const { ports } = require('../lib/store');
     await (async () => {
       try {
         const port = ports.Server1Port1;
-        await uploadImage(port)(
+        const modelUploader = getModelUploader(port);
+        await modelUploader(
           port.name,
           argv['tftp-server-ip'],
           argv['tftp-device-ip'],
